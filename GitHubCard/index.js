@@ -1,9 +1,24 @@
+import axios from 'axios';
+
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
 
+const followersArray = [ 'tetondan', 'dustinmyers', 'justsml', 'luishrd', 'bigknell'];
+
+for (let i = 0; i < followersArray.length; i++) {
+  getGitCard(followersArray[i]);
+}
+
+function getGitCard(username) {
+axios.get(`https://api.github.com/users/${username}`)
+.then(resp => {
+  document.querySelector('.cards').appendChild(githubCard(resp.data));
+})
+.catch(err => console.error(err))
+}
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -28,7 +43,47 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
+
+function githubCard(gitObj){
+  const gitWrapper = document.createElement('div')
+  const gitImg = document.createElement('img')
+  const gitCardInfo = document.createElement('div')
+  const gitName = document.createElement('h3')
+  const gitUserName = document.createElement('p')
+  const gitLocation = document.createElement('p')
+  const gitProfile = document.createElement('p')
+  const gitProfileLink = document.createElement('a')
+  const gitFollowers = document.createElement('p')
+  const gitFollowing = document.createElement('p')
+  const gitBio = document.createElement('p')
+
+  gitWrapper.appendChild(gitImg)
+  gitWrapper.appendChild(gitCardInfo)
+  gitCardInfo.appendChild(gitName) 
+  gitCardInfo.appendChild(gitUserName) 
+  gitCardInfo.appendChild(gitLocation) 
+  gitCardInfo.appendChild(gitProfile) 
+  gitCardInfo.appendChild(gitProfileLink) 
+  gitCardInfo.appendChild(gitFollowers) 
+  gitCardInfo.appendChild(gitFollowing) 
+  gitCardInfo.appendChild(gitBio) 
+
+  gitImg.src = gitObj.avatar_url
+  gitImg.alt = "github user"
+  gitName.textContent = gitObj.name
+  gitUserName.textContent = gitObj.login
+  gitLocation.textContent = gitObj.gitLocation
+  gitProfile.textContent = "Profile"
+  gitProfileLink.textContent = "Link to Profile"
+  gitProfileLink.href = gitObj.html_url;
+  gitFollowers.textContent = `Followers: ${gitObj.followers}`
+  gitFollowing.textContent - `Following: ${gitObj.following}`
+  gitBio.textContent = gitObj.bio
+
+  return gitWrapper;
+}
+
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -49,6 +104,11 @@ const followersArray = [];
       </div>
     </div>
 */
+
+gitWrapper.classList.add('card')
+gitCardInfo.classList.add('card-info')
+gitName.classList.add('name')
+gitUserName.classList.add('username')
 
 /*
   List of LS Instructors Github username's:
